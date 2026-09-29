@@ -547,8 +547,7 @@ class MySessionImpl extends RpcTarget implements MySession {
 
 ```typescript
 import {
-  CAPNWEB_VALIDATE_BUILD, OBSERVABILITY, defineGadgetsWorker, textModules,
-  type DurableObjectMigration, type WranglerExtras,
+  DEFAULT_GATEKEEPER_WRANGLER, OBSERVABILITY, defineGadgetsWorker, type DurableObjectMigration,
 } from "@gadgets/scripts/worker-config";
 
 export default defineGadgetsWorker({
@@ -558,10 +557,7 @@ export default defineGadgetsWorker({
   observability: OBSERVABILITY,
 });
 
-export const wrangler = {
-  build: CAPNWEB_VALIDATE_BUILD,
-  rules: textModules(["**/*.txt", "**/*.svg"]),
-} satisfies WranglerExtras;
+export const wrangler = DEFAULT_GATEKEEPER_WRANGLER;
 
 export const migrations: DurableObjectMigration[] = [
   { tag: "v0", new_sqlite_classes: ["UserAccount", "MyGatekeeperImpl"] },
