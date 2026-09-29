@@ -29,6 +29,11 @@ export interface BindingDecl {
   binding: string;
 }
 
+/** A KV namespace binding declaration. `preview_id` names a local-dev Miniflare namespace only. */
+export interface KvNamespaceDecl extends BindingDecl {
+  preview_id?: string;
+}
+
 /** A service binding declaration in a wrangler config. */
 export interface ServiceBinding {
   /** Binding name the calling worker reads. */
@@ -105,7 +110,7 @@ export interface WranglerConfig {
   /** Workers observability settings. */
   observability?: ObservabilityConfig;
   /** KV namespace bindings; ids become `$KV_<BINDING>_ID` placeholders. */
-  kv_namespaces?: BindingDecl[];
+  kv_namespaces?: KvNamespaceDecl[];
   /** R2 bucket bindings; names become `$R2_<BINDING>_NAME` placeholders. */
   r2_buckets?: BindingDecl[];
   /** Worker Loader bindings (the Gadget sandbox). */
@@ -129,8 +134,6 @@ export interface WranglerConfig {
   build?: WranglerBuild;
   /** Module resolution rules for non-JS imports. */
   rules?: unknown[];
-  /** Present in the files but ignored. */
-  $schema?: string;
 }
 
 /** A deployable workspace package and its parsed Wrangler configuration. */
@@ -242,7 +245,7 @@ export interface WorkerBuild {
 // wrangler.jsonc keys this generator understands. Anything else fails closed — a new config key
 // on a deployable worker needs an explicit decision about how customer instances get it.
 const HANDLED_CONFIG_KEYS = new Set([
-  "$schema", "name", "main", "build", "compatibility_date", "compatibility_flags", "rules",
+  "name", "main", "build", "compatibility_date", "compatibility_flags", "rules",
   "migrations", "observability", "kv_namespaces", "r2_buckets", "worker_loaders", "services",
   "assets", "vars",
   // Browser Rendering (Gadget PDF exports). Unlike artifacts it is generally available, so it
